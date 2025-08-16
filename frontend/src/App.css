@@ -1,0 +1,181 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Short+Stack&display=swap');
+
+/* New Wrapper and Corrected Blur/Start styles */
+.app-wrapper {
+  position: relative;
+}
+
+.start-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.start-button {
+  padding: 20px 40px;
+  font-size: 2em;
+  font-family: var(--font-body); /* Use Inter font */
+  cursor: pointer;
+  border-radius: 10px;
+  border: 2px solid var(--header-text-color);
+  background-color: white;
+  color: var(--header-text-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.start-button:hover {
+  background-color: #f9f9f9;
+}
+
+.app.blurred {
+  filter: blur(5px);
+  pointer-events: none;
+}
+
+
+/* Define our color palette */
+:root {
+  --background-color: #eef5f9;
+  --container-bg: #ffffff;
+  --arby-bubble-bg: #f0f0f0;
+  --user-bubble-bg: #007acc;
+  --header-text-color: #2c3e50;
+  --body-text-color: #34495e;
+  --font-title: 'Short Stack', cursive;
+  --font-body: 'Inter', sans-serif;
+}
+
+body {
+  background-color: var(--background-color);
+  font-family: var(--font-body);
+}
+
+.app {
+  max-width: 800px;
+  width: 70%;
+  margin: 2rem auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: var(--font-body);
+  display: flex;
+  flex-direction: column;
+  height: 85vh;
+  background-color: var(--container-bg);
+  position: relative;
+}
+
+h1 {
+  text-align: center;
+  color: var(--header-text-color);
+  margin-top: 1rem;
+  padding-bottom: 0.5rem;
+  /* Title font is now set in App.js */
+}
+
+.cs-message-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px !important;
+  padding-bottom: 20px !important; /* Adds space below the last message */
+}
+
+/* --- 2. Style the "Arby is thinking..." indicator --- */
+.cs-typing-indicator__content {
+  color: red !important;
+  font-weight: 700 !important;
+  font-size: 1.2em !important;
+}
+
+
+/* Increase Chat Font Size */
+.cs-message__content {
+  font-size: 1.5em;
+}
+
+/* Input font size */
+.cs-message-input__content-editor {
+  font-size: 1.2em !important;
+  padding: 0.8rem 1rem !important;
+  line-height: 1.5 !important;
+}
+.cs-message-input {
+  padding: 1rem !important;
+}
+
+/* Add Padding to the First Message */
+.cs-message-list .cs-message:first-child {
+  padding-top: 10px;
+}
+
+
+/* Message bubble colors and styling */
+.cs-message--incoming .cs-message__content {
+  background-color: var(--arby-bubble-bg) !important;
+  color: var(--body-text-color) !important;
+  border-radius: 18px !important;
+}
+
+.cs-message--outgoing .cs-message__content {
+  background-color: var(--user-bubble-bg) !important;
+  color: white !important;
+  border-radius: 18px !important;
+}
+
+/* --- 1. Double the size of the microphone button --- */
+.mic-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px; /* Increased padding */
+  border-top: 1px solid #ddd;
+}
+
+.mic-button {
+  border: 2px solid var(--user-bubble-bg);
+  background-color: #fff;
+  color: var(--user-bubble-bg);
+  border-radius: 10px; /* More rounded */
+  padding: 15px 30px; /* Increased padding */
+  font-family: var(--font-body);
+  font-weight: bold;
+  font-size: 1.5em; /* Increased font size */
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.mic-button:hover {
+  background-color: var(--user-bubble-bg);
+  color: white;
+}
+
+.mic-button.listening {
+  background-color: #e63946;
+  border-color: #e63946;
+  color: white;
+}
+
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .app {
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+  }
+
+  body {
+    padding: 0;
+    margin: 0;
+  }
+}
