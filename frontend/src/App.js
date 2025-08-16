@@ -12,6 +12,8 @@ import {
 
 import './App.css';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:3001';
+
 function App() {
   const [messages, setMessages] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
@@ -25,35 +27,42 @@ function App() {
     browserSupportsSpeechRecognition
   } = useSpeechRecognition();
   
-  // A ref to prevent the auto-send effect from firing on the initial empty transcript
   const hasTranscriptStarted = useRef(false);
 
-  // This effect detects when the user stops talking and sends the message
   useEffect(() => {
     if (transcript) {
-      hasTranscriptStarted.current = true; // Mark that we've received speech
+      hasTranscriptStarted.current = true;
     }
     
-    // If listening has stopped AND there's a transcript to send
     if (!listening && hasTranscriptStarted.current && transcript.trim() !== "") {
-      handleSend(transcript); // Automatically send the final transcript
-      hasTranscriptStarted.current = false; // Reset for the next turn
+      handleSend(transcript);
+      hasTranscriptStarted.current = false;
     }
   }, [listening, transcript]);
 
 
-  const welcomeMessage = {
-    message: "Heya! My name's Arby, and I'm from Okahumpka, Florida where I go to a Rosenwald School. It's 1955, so my life is probably plenty different than yours. I hear you wanna know about my life. Well, ask me anything, friend!",
-    sender: "Arby",
-    direction: "incoming",
-    audioUrl: "/audio/welcome.mp3"
-  };
-
-  const handleStart = () => {
+  const handleStart = async () => {
     setIsStarted(true);
-    setMessages([welcomeMessage]);
-    const audio = new Audio(welcomeMessage.audioUrl);
-    audio.play().catch(err => console.error("Audio playback failed:", err));
+    setIsTyping(true);
+
+    try {
+        const response = await fetch(`${BACKEND_URL}/greeting`, { method: 'POST' });
+        const data = await response.json();
+
+        const welcomeMessage = {
+            message: data.text,
+            sender: "Arby",
+            direction: "incoming",
+        };
+        setMessages([welcomeMessage]);
+
+        const audio = new Audio(`${BACKEND_URL}${data.audioUrl}`);
+        audio.play().catch(err => console.error("Audio playback failed:", err));
+    } catch (error) {
+        console.error("Failed to fetch welcome message:", error);
+    } finally {
+        setIsTyping(false);
+    }
   };
 
   const scrollToBottom = () => {
@@ -75,7 +84,7 @@ function App() {
     setIsTyping(true);
 
     try {
-      const response = await fetch('http://localhost:3001/chat', {
+      const response = await fetch(`${BACKEND_URL}/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: newMessage })
@@ -88,7 +97,7 @@ function App() {
       };
       setMessages(prevMessages => [...prevMessages, arbyMessage]);
       try {
-        const audio = new Audio(`http://localhost:3001${data.audioUrl}`);
+        const audio = new Audio(`${BACKEND_URL}${data.audioUrl}`);
         await audio.play();
       } catch (err) {
         console.error("Audio playback failed:", err);
@@ -119,6 +128,8 @@ function App() {
       {!isStarted && (
         <div className="start-container">
           <button className="start-button" onClick={handleStart}>Start</button>
+          {/* --- NEW: Instructional text --- */}
+          <p className="start-info">(Upon start allow a few seconds for the program to begin)</p>
         </div>
       )}
       <div className={`app ${!isStarted ? 'blurred' : ''}`}>
@@ -151,7 +162,7 @@ function App() {
           </ChatContainer>
         </MainContainer>
         <div className="mic-container">
-          <button className={`mic-button ${listening ? 'listening' : ''}`} onClick={handleVoiceButtonClick}>
+          <button className={`mic-button ${listening ? 'listening' : ''}`} onClick={handleVoiceButtonClick} disabled={!isStarted || isTyping}>
             {listening ? "Stop" : "Or Click Here and Talk to Me"}
           </button>
         </div>

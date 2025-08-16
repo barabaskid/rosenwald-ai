@@ -13,6 +13,7 @@
   right: 0;
   bottom: 0;
   display: flex;
+  flex-direction: column; /* Allow items to stack vertically */
   justify-content: center;
   align-items: center;
   z-index: 10;
@@ -33,6 +34,17 @@
 
 .start-button:hover {
   background-color: #f9f9f9;
+}
+
+/* --- NEW: Style for the text under the start button --- */
+.start-info {
+  margin-top: 15px;
+  font-family: var(--font-body);
+  font-weight: bold;
+  color: var(--header-text-color);
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 5px 10px;
+  border-radius: 5px;
 }
 
 .app.blurred {
@@ -84,14 +96,17 @@ h1 {
   display: flex;
   flex-direction: column;
   gap: 20px !important;
-  padding-bottom: 20px !important; /* Adds space below the last message */
+  padding-bottom: 20px !important;
 }
 
-/* --- 2. Style the "Arby is thinking..." indicator --- */
-.cs-typing-indicator__content {
+/* --- FIXED: Style the "Arby is thinking..." indicator --- */
+.cs-typing-indicator {
   color: red !important;
   font-weight: 700 !important;
   font-size: 1.2em !important;
+}
+.cs-typing-indicator__content {
+  color: red !important;
 }
 
 
@@ -129,12 +144,12 @@ h1 {
   border-radius: 18px !important;
 }
 
-/* --- 1. Double the size of the microphone button --- */
+/* Microphone Button Styles */
 .mic-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px; /* Increased padding */
+  padding: 20px;
   border-top: 1px solid #ddd;
 }
 
@@ -142,11 +157,11 @@ h1 {
   border: 2px solid var(--user-bubble-bg);
   background-color: #fff;
   color: var(--user-bubble-bg);
-  border-radius: 10px; /* More rounded */
-  padding: 15px 30px; /* Increased padding */
+  border-radius: 10px;
+  padding: 15px 30px;
   font-family: var(--font-body);
   font-weight: bold;
-  font-size: 1.5em; /* Increased font size */
+  font-size: 1.5em;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
 }
